@@ -6,6 +6,7 @@ use App\Filament\Resources\BlogResource\Pages;
 use App\Filament\Resources\BlogResource\RelationManagers;
 use App\Models\Blog;
 use Filament\Forms;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -44,6 +45,18 @@ class BlogResource extends Resource
                     ->unique(Blog::class, 'slug', fn($record) => $record),
                 Forms\Components\RichEditor::make('content')
                     ->required(),
+
+                TagsInput::make('tags')
+                    ->label('Tags')
+                    ->suggestions(fn() => \App\Models\Tag::pluck('name')->toArray())
+                    ->required()
+                    ->afterStateHydrated(function (TagsInput $component, ?Blog $record) {
+                        if ($record) {
+                            $component->state(
+                                $record->tags->pluck('name')->toArray()
+                            );
+                        }
+                    })
             ]);
     }
 

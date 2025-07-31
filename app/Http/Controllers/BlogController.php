@@ -23,7 +23,7 @@ class BlogController extends Controller
 
     public function show($slug)
     {
-        $blog = Blog::with('category')->where('slug', $slug)->first();
+        $blog = Blog::with(['category', 'tags'])->where('slug', $slug)->first();
 
         if (!$blog) {
             return response()->json([
