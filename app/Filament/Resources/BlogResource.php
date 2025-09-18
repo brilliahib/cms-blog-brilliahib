@@ -44,6 +44,9 @@ class BlogResource extends Resource
                     ->required()
                     ->unique(Blog::class, 'slug', fn($record) => $record),
                 Forms\Components\RichEditor::make('content')
+                    ->fileAttachmentsDisk('public')
+                    ->fileAttachmentsDirectory('blog')
+                    ->fileAttachmentsVisibility('public')
                     ->required(),
 
                 TagsInput::make('tags')
